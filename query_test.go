@@ -117,3 +117,34 @@ func TestInsertWithoutSqlInjection(t *testing.T) {
 	}
 	fmt.Println("Success insert data to database")
 }
+
+func TestInsertLastInsertId(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	email := "admin@admin"
+	comment := "ada komentar"
+
+	ctx := context.Background()
+
+	// sql injection jika menggunakan/menggabungkan value dalam string
+	// script := "INSERT INTO comments(email, comment) VALUES ('upi@upi', 'ada komentar');"
+
+	// gunakan tanda "?" untuk menghindari sql injection
+	script := "INSERT INTO comments(email, comment) VALUES (?, ?);"
+
+	// ExexContext berlaku untuk query yang tidak mengembalikan data ( insert, update, delete)
+	// _, err := db.ExecContext(ctx, script)
+
+	// Mencegah sql injection dengan memasukkan pada context
+	result, err := db.ExecContext(ctx, script, email, comment)
+	if err != nil {
+		panic(err)
+	}
+	insertId, err := result.LastInsertId()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Last insert id : ", insertId)
+}
