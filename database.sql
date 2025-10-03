@@ -24,3 +24,12 @@ VALUES ('budi', 'Budi', 'budi@gmail.com', 100000, 5.0, '1999-9-9', true);
 
 INSERT INTO customer(id, name, email, balance, rating, birth_date, married)
 VALUES ('joko', 'Joko', NULL, 100000, 5.0, NULL, true);
+
+CREATE TABLE user
+(
+username VARCHAR(100) NOT NULL,
+password VARCHAR(100) NOT NULL,
+PRIMARY KEY (username)
+) ENGINE = InnoDB;
+
+INSERT INTO user(username, password) VALUES('admin', 'admin')
