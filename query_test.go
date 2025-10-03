@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"strconv"
 	"testing"
 	"time"
 )
@@ -147,4 +148,30 @@ func TestInsertLastInsertId(t *testing.T) {
 	}
 
 	fmt.Println("Last insert id : ", insertId)
+}
+
+func TestPrepareStatement(t *testing.T) {
+	db := GetConnection()
+	defer db.Close()
+
+	ctx := context.Background()
+
+	script := "INSERT INTO comments(email, comment) VALUES (?, ?);"
+	statemnt, err := db.PrepareContext(ctx, script)
+	if err != nil {
+		panic(err)
+	}
+
+	for i := 0; i < 10; i++ {
+		email := "eko" + strconv.Itoa(i) + "@gmail.com"
+		comment := "ini komen ke " + strconv.Itoa(i)
+		result, err := statemnt.ExecContext(ctx, email, comment)
+		if err != nil {
+			panic(err)
+		}
+		lastInserId, _ := result.LastInsertId()
+		fmt.Println("Comment id:", lastInserId)
+	}
+
+	defer statemnt.Close()
 }
