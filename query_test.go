@@ -187,7 +187,7 @@ func TestDatabaseTransaction(t *testing.T) {
 	}
 
 	sqlQuery := "INSERT INTO comments(email, comment) VALUES (?,?)"
-	
+
 	for i := 0; i < 10; i++ {
 		email := "eko" + strconv.Itoa(i) + "@gmail.com"
 		comment := "ini komen ke " + strconv.Itoa(i)
@@ -206,3 +206,4 @@ func TestDatabaseTransaction(t *testing.T) {
 		panic(err)
 	}
 }
+
